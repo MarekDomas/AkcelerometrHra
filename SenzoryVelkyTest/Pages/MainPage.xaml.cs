@@ -9,7 +9,6 @@ public partial class MainPage : ContentPage
     private static int speed = 25;
     private static int orientation = 1;
     private static int sebrano = 0;
-    static List<View> coins = [];
     private static int sideLength = 100;
     private static PanGestureRecognizer gestureRecognizer = new();
     private static double panX = 0;
@@ -66,13 +65,17 @@ public partial class MainPage : ContentPage
     
     private void Accelerometer_ReadingChanged(object sender, AccelerometerChangedEventArgs e)
     {
-        //Pokud je x > 0 tak čtverec padá dolů a naopak
+        //Pokud je x > 0 tak měšec padá dolů a naopak
         orientation = e.Reading.Acceleration.X > 0 ? 1 : -1; 
 
-        //Z je 1 když je zařízení vodorovně položené, tak se odečítá od 1 aby se pohybovalo když je zařízení kolmé
-        AbsoluteLayout.SetLayoutBounds(rect,new( rect.X + e.Reading.Acceleration.Y * speed , rect.Y + (1 - e.Reading.Acceleration.Z) * orientation * speed , sideLength,sideLength));
+        //Z je 1 když je zařízení vodorovně položené, tak se odečítá od 1 aby se pohybovalo když je zařízení nakloněné
+        AbsoluteLayout.SetLayoutBounds(
+            rect,
+            new( 
+                rect.X + e.Reading.Acceleration.Y * speed , 
+                rect.Y + (1 - e.Reading.Acceleration.Z) * orientation * speed,
+            sideLength,sideLength));
         pickCoin();
-        
     }
     private static bool CheckCollision(View rect, View? view)
     {
@@ -95,7 +98,6 @@ public partial class MainPage : ContentPage
             if (!CheckCollision(rect, coin)) continue;
 
             MainLayout.Remove(coin);
-            coins.Remove(coin);
             sebrano++;
             lbl.Text = $"Sebráno: {sebrano}";
             if (sebrano % 15 == 0 && sebrano != 0)
@@ -110,22 +112,22 @@ public partial class MainPage : ContentPage
     {
         refreshBtn.IsEnabled = false;
         refreshBtn.BackgroundColor = Colors.DarkGray;
+
         var diameter = 50;
         Random random = new();
 
         for (var i = 0; i < number; i++)
         {
-            var coin = new Image()
+            var coin = new Image
             {
                 WidthRequest = diameter,
                 HeightRequest = diameter,
                 Source = "coin.png",
-                
             };
             MainLayout.Add(coin);
             //Mince se generují v náhodných pozicích na obrazovce
+            //Nepoužilo se DeviceDisplay protože se mince z nějakého důvodu generovali mimo obrazovku
             AbsoluteLayout.SetLayoutBounds(coin,new(random.Next(70, 1000), random.Next(20, 700),diameter,diameter));
-            coins.Add(coin);
         }
     }
     
@@ -133,7 +135,6 @@ public partial class MainPage : ContentPage
     {
         generateCoins(15);
     }
-    //Nepoužilo se DeviceDisplay protože se mince z nějakého důvodu generovali mimo obrazovku
 
     private void ControlsSwitch_OnToggled(object? sender, ToggledEventArgs e)
     {
