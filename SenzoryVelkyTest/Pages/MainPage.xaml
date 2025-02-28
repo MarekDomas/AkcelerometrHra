@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SenzoryVelkyTest.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <AbsoluteLayout x:Name="MainLayout" Margin="15,10,0,0">
+        <Label
+            x:Name="lbl"
+            FontAttributes="Bold"
+            FontSize="25"
+            Text="Sebráno: 0"
+            TextColor="Black" />
+        <Border x:Name="rect" Stroke="Transparent">
+            <Image
+                AbsoluteLayout.LayoutBounds="100,100,250,180"
+                AbsoluteLayout.LayoutFlags="None"
+                HeightRequest="100"
+                Source="mesec.png"
+                WidthRequest="100" />
+        </Border>
+
+        <Button
+            x:Name="refreshBtn"
+            AbsoluteLayout.LayoutBounds="0,50"
+            BackgroundColor="DarkGray"
+            Clicked="RefreshBtn_OnClicked"
+            IsEnabled="False"
+            Text="Generovat mince"
+            WidthRequest="200" />
+
+        <HorizontalStackLayout AbsoluteLayout.LayoutBounds="0,100">
+            <Switch
+                x:Name="ControlsSwitch"
+                IsToggled="False"
+                Toggled="ControlsSwitch_OnToggled" />
+            <Label
+                x:Name="controlsLabel"
+                Margin="0,10,0,0"
+                Text="Ovládání otáčením" />
+        </HorizontalStackLayout>
+
+    </AbsoluteLayout>
+</ContentPage>
